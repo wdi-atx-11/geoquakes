@@ -29,7 +29,7 @@ function success(json){
     var marker = new google.maps.Marker({
         position: pos,
         map: map,
-        title: earthquake.properties.mag.toString(),
+        icon: './images/earthquake.png'
     });
 
   });
