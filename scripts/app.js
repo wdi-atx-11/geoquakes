@@ -23,7 +23,7 @@ callAjax();
 }); //end documentready
 
 
-function onSubmitReqSuccess(returnArray){
+function onSubmitReqSuccess(json){
     var center ={lat: 30.2682, lng: -97.74295};
 
     var map = new google.maps.Map(document.getElementById('map'), {
@@ -31,10 +31,13 @@ function onSubmitReqSuccess(returnArray){
       zoom: 3
     });
 
-    for(i=0; i<=returnArray.features.length; i++) {
-      $("#info").append(`<p>${returnArray.features[i].properties.place}</p>`);
-      var pinlocations = {lat:returnArray.features[i].geometry.coordinates[1], lng: returnArray.features[i].geometry.coordinates[0]};
-      console.log(pinlocations);
+    json.features.forEach(function(earthquake){
+      var titleSplit = earthquake.properties.title.split(" ");
+      var protoTitleSplit = titleSplit.slice(6, titleSplit.length);
+
+
+      $("#info").append(`<p>${protoTitleSplit.join(" ")}</p><p>${new Date(earthquake.properties.time)}</p>`);
+      var pinlocations = {lat:earthquake.geometry.coordinates[1], lng: earthquake.geometry.coordinates[0]};
 
       var marker = new google.maps.Marker({
           position: pinlocations,
@@ -43,8 +46,8 @@ function onSubmitReqSuccess(returnArray){
           icon: earthquakeIcon,
           shape: shape
       });
+    });
   }
-}
 
 function onError(xhr, status, errorThrown) {
       alert("Sorry, there was a problem!");
